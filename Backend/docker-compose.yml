@@ -14,6 +14,21 @@ services:
       timeout: 5s
       retries: 5
 
+  test_db:
+    image: postgres:13
+    container_name: postgres_test_db
+    environment:
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_DB: test_database
+    volumes:
+      - test_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d test_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   flask_api:
     build: .
     container_name: flask_api
@@ -29,6 +44,21 @@ services:
       db:
         condition: service_healthy
     restart: on-failure
+  
+  flask_api_test:
+    build: .
+    container_name: flask_api_test
+    environment:
+      - FLASK_APP=main.py
+      - FLASK_ENV=testing
+      - DATABASE_URL=postgresql://test_user:test_password@test_db:5432/test_database
+      - PYTHONPATH=/app:/app/app
+    depends_on:
+      test_db:
+        condition: service_healthy
+    command: ["pytest", "--maxfail=1", "--disable-warnings", "-v"]
+
 
 volumes:
   db_data:
+  test_db_data:
