@@ -22,7 +22,7 @@ services:
       - FLASK_ENV=development
       - DATABASE_URL=postgresql://user:password@db:5432/mydatabase
     volumes:
-      - .:/app
+      - ./app:/app
     ports:
       - "5000:5000"
     depends_on:
