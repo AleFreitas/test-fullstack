@@ -44,7 +44,7 @@ services:
       db:
         condition: service_healthy
     restart: on-failure
-  
+
   flask_api_test:
     build: .
     container_name: flask_api_test
