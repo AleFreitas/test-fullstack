@@ -6,6 +6,7 @@ from werkzeug.exceptions import Conflict
 
 # --------------------- ERROR HANDLERS ---------------------
 
+
 @api.errorhandler(BadRequest)
 def handle_bad_request_error(e):
     return {"message": "Invalid request", "details": str(e)}, 400

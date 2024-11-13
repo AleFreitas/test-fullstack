@@ -7,7 +7,8 @@ from repositories.users_repository import get_all_users
 from repositories.users_repository import get_user_by_email
 from repositories.users_repository import get_user_by_id
 from utils.user_types import UserDataDict
-from werkzeug.exceptions import BadRequest, Conflict
+from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import Conflict
 
 
 def find_all_users():
@@ -19,12 +20,14 @@ def find_all_users():
 def update_user(user: UserDataDict):
     """Implements the business logic to update a user"""
     with db.session() as session:
-        user_exists = get_user_by_id(session, user["id"])
+        user_exists = get_user_by_id(session, user["id"]).to_dict()
         if not user_exists:
             raise BadRequest("User does not exist")
         if user.get("email"):
-            existent_user_email = get_user_by_email(session, user["email"])
-            if existent_user_email and (existent_user_email["id"] != user["id"]):
+            existent_user_email = get_user_by_email(session, user["email"]).to_dict()
+            if existent_user_email and (
+                existent_user_email["id"] != user["id"]
+            ):
                 raise Conflict("User already exists")
         return edit_user(session, user)
 
