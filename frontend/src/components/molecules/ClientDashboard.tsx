@@ -34,7 +34,7 @@ const ClientDashboard: React.FC = () => {
             <ClientDasboardTitle />
             <Divider />
             <Box
-                sx={{width: '100%', height: '50px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginY: '20px'}}
+                className="w-full h-[50px] flex justify-between items-center my-5"
             >
                 <Box>
                     <Typography sx={{ fontWeight: '600', fontSize: '17px', color: '#737980'}}>Listagem de usuários</Typography>
@@ -56,9 +56,7 @@ const ClientDashboard: React.FC = () => {
                     }}
                 >Novo cliente</Button>
             </Box>
-            <Box
-                sx={{width: '100%', height: '500px', overflowY: 'auto'}}
-            >
+            <Box sx={{width: '100%', height: '500px', overflowY: 'auto'}}>
                 {clients.map(client => (
                     <ClientListItem key={client.id} client={client} />
                 ))}
