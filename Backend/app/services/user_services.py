@@ -20,13 +20,13 @@ def find_all_users():
 def update_user(user: UserDataDict):
     """Implements the business logic to update a user"""
     with db.session() as session:
-        user_exists = get_user_by_id(session, user["id"]).to_dict()
+        user_exists = get_user_by_id(session, user["id"])
         if not user_exists:
             raise BadRequest("User does not exist")
         if user.get("email"):
-            existent_user_email = get_user_by_email(session, user["email"]).to_dict()
+            existent_user_email = get_user_by_email(session, user["email"])
             if existent_user_email and (
-                existent_user_email["id"] != user["id"]
+                existent_user_email.to_dict()["id"] != user["id"]
             ):
                 raise Conflict("User already exists")
         return edit_user(session, user)

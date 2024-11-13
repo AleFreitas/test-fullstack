@@ -6,6 +6,7 @@ import pytest
 from app.services.user_services import find_all_users
 from app.services.user_services import insert_user
 from app.services.user_services import update_user
+from tests.mocks.user_mocks import mock_same_email_user
 from tests.mocks.user_mocks import mock_user_data
 from tests.mocks.user_mocks import mock_user_list
 from werkzeug.exceptions import BadRequest
@@ -43,7 +44,7 @@ def test_update_user_success(
 ):
     """SHOULD return user data when update_user is called"""
     with app.app_context():
-        result = update_user(mock_user_data)
+        result = update_user(mock_user_data.to_dict())
 
     assert result == mock_user_data
 
@@ -57,7 +58,7 @@ def test_update_user_user_not_found(mock_get_user_by_id, app):
     """SHOULD raise BadRequest when user does not exist"""
     with app.app_context():
         with pytest.raises(BadRequest, match="User does not exist"):
-            update_user(mock_user_data)
+            update_user(mock_user_data.to_dict())
 
     mock_get_user_by_id.assert_called_once()
 
@@ -74,9 +75,7 @@ def test_update_user_new_email_already_registered(
     """SHOULD raise Conflict when new email is already registered"""
     with app.app_context():
         with pytest.raises(Conflict, match="User already exists"):
-            invalid_mock_user_data = mock_user_data.copy()
-            invalid_mock_user_data["id"] = "ARBITRARY_ID"
-            update_user(invalid_mock_user_data)
+            update_user(mock_same_email_user.to_dict())
 
     mock_get_user_by_id.assert_called_once()
     mock_get_user_by_email.assert_called_once()
@@ -89,16 +88,17 @@ def test_update_user_new_email_already_registered(
 
 @patch("app.services.user_services.get_user_by_email", return_value=None)
 @patch(
-    "app.services.user_services.create_new_user", return_value=mock_user_data
+    "app.services.user_services.create_new_user",
+    return_value=mock_user_data.to_dict(),
 )
 def test_insert_user_success(
     mock_create_new_user, mock_get_user_by_email, app
 ):
     """SHOULD return user data when insert_user is called"""
     with app.app_context():
-        result = insert_user(mock_user_data)
+        result = insert_user(mock_user_data.to_dict())
 
-    assert result == mock_user_data
+    assert result == mock_user_data.to_dict()
 
     mock_get_user_by_email.assert_called_once()
     mock_create_new_user.assert_called_once()
@@ -111,6 +111,6 @@ def test_insert_user_new_email_already_registered(mock_get_user_by_email, app):
     """SHOULD raise Conflict when new email is already registered"""
     with app.app_context():
         with pytest.raises(Conflict, match="User already exists"):
-            insert_user(mock_user_data)
+            insert_user(mock_user_data.to_dict())
 
     mock_get_user_by_email.assert_called_once()

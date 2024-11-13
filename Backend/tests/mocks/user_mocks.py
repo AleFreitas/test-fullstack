@@ -1,17 +1,28 @@
 from __future__ import annotations
 
-mock_user_data = {
-    "id": "123e4567-e89b-12d3-a456-426614174000",
-    "email": "arthur@example.com",
-    "name": "Arthur",
-    "status": "active",
-    "cellphone": "1234569999",
-    "cpf": "12345677777",
-}
+from app.models.user import User
+
+mock_user_data = User(
+    id="123e4567-e89b-12d3-a456-426614174000",
+    email="arthur@example.com",
+    name="Arthur",
+    status="active",
+    cellphone="1234569999",
+    cpf="12345677777",
+)
+
+mock_same_email_user = User(
+    id="123e4567-e89b-12d3-a456-426614174001",
+    email="arthur@example.com",
+    name="Thiago",
+    status="active",
+    cellphone="12345697777",
+    cpf="12341111111",
+)
 
 mock_user_list = [
     {
-        "id": "123e4567-e89b-12d3-a456-426614174001",
+        "id": "123e4567-e89b-12d3-a456-426614174002",
         "name": "Alice",
         "email": "alice@example.com",
         "status": "active",
@@ -21,7 +32,7 @@ mock_user_list = [
         "updatedAt": 1672531200 * 1000,
     },
     {
-        "id": "123e4567-e89b-12d3-a456-426614174002",
+        "id": "123e4567-e89b-12d3-a456-426614174003",
         "name": "Bob",
         "email": "bob@example.com",
         "status": "inactive",
