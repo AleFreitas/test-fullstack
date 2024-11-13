@@ -14,21 +14,7 @@ from werkzeug.exceptions import BadRequest
 def find_all_users():
     """Implements the business logic to return all users"""
     with db.session() as session:  # Gerencia automaticamente a sessão do banco
-        users_db = get_all_users(session)
-
-    return [
-        {
-            "id": user.id,
-            "name": user.name,
-            "email": user.email,
-            "status": user.status,
-            "cellphone": user.cellphone,
-            "cpf": user.cpf,
-            "createdAt": user.created_at.timestamp() * 1000,
-            "updatedAt": user.updated_at.timestamp() * 1000,
-        }
-        for user in users_db
-    ]
+        return get_all_users(session)
 
 
 def update_user(user: UserDataDict):

@@ -10,7 +10,7 @@ from utils.user_types import UserDataDict
 
 def get_all_users(db_session: Session):
     """Returns all users"""
-    return db_session.query(User).all()
+    return [user.to_dict() for user in db_session.query(User).all()]
 
 
 def get_user_by_id(db_session: Session, user_id: int):
