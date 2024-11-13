@@ -1,10 +1,28 @@
 import { Box, Button, Divider, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { User } from 'tabler-icons-react';
 import ClientDasboardTitle from '../atoms/ClientDashboardTitle';
 import ClientListItem from './ClientListItem';
+import { useQuery } from '@tanstack/react-query';
+import { getAllClientsFn } from '../../services/clientService';
+import { IClientData } from '../../types/clients';
 
 const ClientDashboard: React.FC = () => {
+    const [clients, setClients] = useState<IClientData[]>([]);
+    const {
+        isLoading,
+        data,
+        error
+    } = useQuery({
+        queryKey: ['get-users'],
+        queryFn: getAllClientsFn
+    });
+    useEffect(() => {
+        if (data) {
+            setClients(data.data);
+        }
+    }, [data]);
+
     return (
         <Box
             sx={{
@@ -38,7 +56,14 @@ const ClientDashboard: React.FC = () => {
                     }}
                 >Novo cliente</Button>
             </Box>
-            <ClientListItem />
+            <Box
+                sx={{width: '100%', height: '500px', overflowY: 'auto'}}
+            >
+                {clients.map(client => (
+                    <ClientListItem key={client.id} client={client} />
+                ))}
+            </Box>
+            <Typography sx={{ color: '#949494', fontSize: '15px', marginTop: '10px'}}>Exibindo {clients.length} clientes</Typography>
         </Box>
     )
 }
