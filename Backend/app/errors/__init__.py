@@ -2,18 +2,9 @@ from __future__ import annotations
 
 from controllers.api import api
 from werkzeug.exceptions import BadRequest
-from werkzeug.exceptions import HTTPException
-
-# --------------------- CUSTOM ERRORS ---------------------
-
-
-class ConflictError(HTTPException):
-    code = 409
-    description = "Conflict: resource already exists."
-
+from werkzeug.exceptions import Conflict
 
 # --------------------- ERROR HANDLERS ---------------------
-
 
 @api.errorhandler(BadRequest)
 def handle_bad_request_error(e):
@@ -25,7 +16,7 @@ def handle_value_error(e):
     return {"message": "Invalid data provided", "details": str(e)}, 400
 
 
-@api.errorhandler(ConflictError)
+@api.errorhandler(Conflict)
 def handle_conflict_error(e):
     return {"message": "Conflict", "details": str(e)}, 409
 

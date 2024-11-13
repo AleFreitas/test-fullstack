@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from errors import ConflictError
 from models import db
 from repositories.users_repository import create_new_user
 from repositories.users_repository import edit_user
@@ -8,7 +7,7 @@ from repositories.users_repository import get_all_users
 from repositories.users_repository import get_user_by_email
 from repositories.users_repository import get_user_by_id
 from utils.user_types import UserDataDict
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest, Conflict
 
 
 def find_all_users():
@@ -25,8 +24,8 @@ def update_user(user: UserDataDict):
             raise BadRequest("User does not exist")
         if user.get("email"):
             existent_user_email = get_user_by_email(session, user["email"])
-            if existent_user_email and existent_user_email.id != user["id"]:
-                raise ConflictError("User already exists")
+            if existent_user_email and (existent_user_email["id"] != user["id"]):
+                raise Conflict("User already exists")
         return edit_user(session, user)
 
 
@@ -35,5 +34,5 @@ def insert_user(user: UserDataDict):
     with db.session() as session:
         existent_user = get_user_by_email(session, user["email"])
         if existent_user:
-            raise ConflictError("User already exists")
+            raise Conflict("User already exists")
         return create_new_user(session, user)
