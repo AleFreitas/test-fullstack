@@ -1,16 +1,17 @@
 import { Box, Button, Divider, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { User } from 'tabler-icons-react';
 import ClientDasboardTitle from '../atoms/ClientDashboardTitle';
 import ClientListItem from './ClientListItem';
 import { useQuery } from '@tanstack/react-query';
 import { getAllClientsFn } from '../../services/clientService';
 import { IClientData } from '../../types/clients';
+import { toast } from 'react-toastify';
 
 const ClientDashboard: React.FC = () => {
     const [clients, setClients] = useState<IClientData[]>([]);
     const {
         isLoading,
+        isSuccess,
         data,
         error
     } = useQuery({
@@ -18,7 +19,13 @@ const ClientDashboard: React.FC = () => {
         queryFn: getAllClientsFn
     });
     useEffect(() => {
+        if (error) {
+            toast.error('Erro ao carregar os clientes', {toastId: 'get-clients-error'});
+        }
+    },[error])
+    useEffect(() => {
         if (data) {
+            isSuccess && toast.success('Clientes obtidos com sucesso',{toastId: 'get-clients-success', autoClose: 2000});
             setClients(data.data);
         }
     }, [data]);

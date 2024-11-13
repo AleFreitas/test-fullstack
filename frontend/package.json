@@ -15,6 +15,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
     "react-scripts": "5.0.1",
+    "react-toastify": "^10.0.6",
     "tabler-icons-react": "^1.56.0",
     "web-vitals": "^2.1.4",
     "zustand": "^5.0.1"
@@ -23,7 +24,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "npx eslint ."
   },
   "eslintConfig": {
     "extends": [
@@ -44,8 +46,17 @@
     ]
   },
   "devDependencies": {
+    "@eslint/js": "^9.14.0",
     "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.12.0",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.14"
+    "prettier": "^3.3.3",
+    "tailwindcss": "^3.4.14",
+    "typescript-eslint": "^8.14.0"
   }
 }
