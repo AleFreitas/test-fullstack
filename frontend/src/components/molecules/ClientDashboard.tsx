@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from '@mui/material';
+import { Box, CircularProgress, Divider, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ClientDasboardTitle from '../atoms/ClientDashboardTitle';
 import ClientListItem from './ClientListItem';
@@ -13,6 +13,8 @@ const ClientDashboard: React.FC = () => {
     const [clients, setClients] = useState<IClientData[]>([]);
     const {
         isSuccess,
+        isError,
+        isLoading,
         data,
         error
     } = useQuery({
@@ -63,9 +65,24 @@ const ClientDashboard: React.FC = () => {
                 />
             </Box>
             <Box sx={{width: '100%', height: '500px', overflowY: 'auto'}}>
-                {clients.map(client => (
-                    <ClientListItem key={client.id} client={client} />
-                ))}
+                {isLoading ? (
+                    <Box className={'flex w-full h-[500px] items-center justify-center'}>
+                        <CircularProgress color='inherit' />
+                    </Box>
+                ) : (
+                    <>
+                        {isSuccess && (
+                            clients.map(client => (
+                                <ClientListItem key={client.id} client={client} />
+                            ))
+                        )}
+                        {isError && (
+                            <Box className={'flex w-full h-[500px] items-center justify-center'}>
+                                <Typography sx={{color: '#949494', fontSize: '15px'}}>Erro ao carregar os clientes</Typography>
+                            </Box>
+                        )}
+                    </>
+                )}
             </Box>
             <Typography sx={{ color: '#949494', fontSize: '15px', marginTop: '10px'}}>Exibindo {clients.length} clientes</Typography>
         </Box>
