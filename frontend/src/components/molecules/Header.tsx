@@ -11,6 +11,8 @@ const Header: React.FC = () => {
                 component={'img'}
                 className="h-[65px]"
                 src={"/uolHeader.png"}
+                onClick={() => window.location.href = '/'}
+                sx={{cursor: 'pointer'}}
             />
         </Box>
     );

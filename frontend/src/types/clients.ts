@@ -14,9 +14,9 @@ export interface IClientData extends IClientCreateData {
 
 export interface IClientEditData {
     id: string;
-    name?: string;
-    email?: string;
-    status?: 'active' | 'inactive' | 'waiting' | 'deactivated';
-    cellphone?: string;
-    cpf?: string;
+    name: string;
+    email: string;
+    status: 'active' | 'inactive' | 'waiting' | 'deactivated';
+    cellphone: string;
+    cpf: string;
 }

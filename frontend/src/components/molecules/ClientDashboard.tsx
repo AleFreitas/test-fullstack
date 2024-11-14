@@ -6,6 +6,8 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllClientsFn } from '../../services/clientService';
 import { IClientData } from '../../types/clients';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import CustomButton from '../atoms/CustomButton';
 
 const ClientDashboard: React.FC = () => {
     const [clients, setClients] = useState<IClientData[]>([]);
@@ -18,6 +20,8 @@ const ClientDashboard: React.FC = () => {
         queryKey: ['get-users'],
         queryFn: getAllClientsFn
     });
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (error) {
             toast.error('Erro ao carregar os clientes', {toastId: 'get-clients-error'});
@@ -47,21 +51,15 @@ const ClientDashboard: React.FC = () => {
                     <Typography sx={{ fontWeight: '600', fontSize: '17px', color: '#737980'}}>Listagem de usuários</Typography>
                     <Typography sx={{ color: '#949494', fontSize: '15px'}}>Escolha um cliente para visualizar os detalhes</Typography>
                 </Box>
-                <Button
-                    sx={{
-                        width: '110px',
-                        height: '40px',
-                        color: '#fff',
-                        textTransform: 'none',
-                        backgroundColor: '#e19932',
-                        transition: 'all 0.3s ease',
-                        '&:hover': {
-                            width: '113px',
-                            height: '43px',
-                            backgroundColor: '#e19932'
-                        }
-                    }}
-                >Novo cliente</Button>
+                <CustomButton
+                    color='#fff'
+                    borderColor='#e19932'
+                    backgroundColor='#e19932'
+                    onClick={() => navigate('/client/new')}
+                    hoverBackgroundColor='#fff'
+                    hoverColor='#e19932'
+                    text='Novo cliente'
+                />
             </Box>
             <Box sx={{width: '100%', height: '500px', overflowY: 'auto'}}>
                 {clients.map(client => (
