@@ -7,19 +7,25 @@ import 'react-toastify/dist/ReactToastify.css';
 import UserForm from '../pages/UserForm';
 
 const AppRoutes: React.FC = () => {
-  const queryClient = new QueryClient();
-  return (
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <ToastContainer />
-        <Routes>
-          <Route path="/" element={<UserList />} />
-          <Route path="/client/new" element={<UserForm type={'create'} />} />
-          <Route path="/client/edit" element={<UserForm type={'edit'} />} />
-        </Routes>
-      </QueryClientProvider>
-    </BrowserRouter>
-  );
+    const queryClient = new QueryClient();
+    return (
+        <BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+                <ToastContainer />
+                <Routes>
+                    <Route path="/" element={<UserList />} />
+                    <Route
+                        path="/client/new"
+                        element={<UserForm type={'create'} />}
+                    />
+                    <Route
+                        path="/client/edit"
+                        element={<UserForm type={'edit'} />}
+                    />
+                </Routes>
+            </QueryClientProvider>
+        </BrowserRouter>
+    );
 };
 
 export default AppRoutes;
