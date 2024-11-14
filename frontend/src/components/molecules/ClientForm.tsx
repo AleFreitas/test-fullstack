@@ -38,7 +38,7 @@ const ClientForm: React.FC <{type: 'create' | 'edit'}> = ({type})   => {
         } else {
             clearChosenClient();
         }
-    },[])// eslint-disable-line react-hooks/exhaustive-deps
+    },[])// eslint-disable-line
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.name as keyof IClientCreateData;
@@ -122,7 +122,11 @@ const ClientForm: React.FC <{type: 'create' | 'edit'}> = ({type})   => {
                     status: 'deactivated'
                 });
             })
-            .catch(() => {
+            .catch((e) => {
+                if(e.response.status === 409) {
+                    toast.error('Este email já está em uso', {toastId: 'create-client-error'});
+                    return;
+                }
                 toast.error('Erro ao criar usuário', {toastId: 'create-client-error'});
             })
         } else {
@@ -137,7 +141,11 @@ const ClientForm: React.FC <{type: 'create' | 'edit'}> = ({type})   => {
                 .then(() => {
                     toast.success('Usuário editado com sucesso');
                 })
-                .catch(() => {
+                .catch((e) => {
+                    if(e.response.status === 409) {
+                        toast.error('Este email já está em uso', {toastId: 'edit-client-error'});
+                        return;
+                    }
                     toast.error('Erro ao editar usuário', {toastId: 'edit-client-error'});
                 })
             

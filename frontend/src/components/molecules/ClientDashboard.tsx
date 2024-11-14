@@ -22,7 +22,6 @@ const ClientDashboard: React.FC = () => {
         queryFn: getAllClientsFn
     });
     const navigate = useNavigate();
-
     useEffect(() => {
         if (error) {
             toast.error('Erro ao carregar os clientes', {toastId: 'get-clients-error'});
@@ -72,9 +71,15 @@ const ClientDashboard: React.FC = () => {
                 ) : (
                     <>
                         {isSuccess && (
-                            clients.map(client => (
-                                <ClientListItem key={client.id} client={client} />
-                            ))
+                            clients.length === 0 ? (
+                                <Box className={'flex w-full h-[500px] items-center justify-center'}>
+                                    <Typography sx={{color: '#949494', fontSize: '15px'}}>Nenhum cliente cadastrado</Typography>
+                                </Box>
+                            ): (
+                                clients.map(client => (
+                                    <ClientListItem key={client.id} client={client} />
+                                ))
+                            )
                         )}
                         {isError && (
                             <Box className={'flex w-full h-[500px] items-center justify-center'}>
