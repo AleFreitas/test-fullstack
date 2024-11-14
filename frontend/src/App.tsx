@@ -1,12 +1,10 @@
-import React from "react";
-import AppRoutes from "./routes/app";
-import "./globalStyles.css"; // Adicione esta linha
-import "./index.css"
+import React from 'react';
+import AppRoutes from './routes/app';
+import './globalStyles.css'; // Adicione esta linha
+import './index.css';
 
 const App: React.FC = () => {
-  return (
-    <AppRoutes />
-  );
+  return <AppRoutes />;
 };
 
 export default App;
