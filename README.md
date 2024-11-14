@@ -180,6 +180,7 @@ If you want to run only the api without the frontend follow these steps
 1) make sure you have Docker on your PC
 2) clone this repository using the ```git clone``` command
 3) on the root of the ```/Backend``` folder run ```docker compose up --build```
+   - extra information: if you run ```docker compose up --build```on the backend root the unit tests container will also be executed
 
 ## How to run the FrontEnd
 If you want to run only the frontend without the api follow these steps
