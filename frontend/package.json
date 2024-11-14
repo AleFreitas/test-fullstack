@@ -17,6 +17,7 @@
         "react-scripts": "5.0.1",
         "react-toastify": "^10.0.6",
         "tabler-icons-react": "^1.56.0",
+        "typescript": "^5.6.3",
         "web-vitals": "^2.1.4",
         "zustand": "^5.0.1"
     },
@@ -58,6 +59,8 @@
         "postcss": "^8.4.49",
         "prettier": "^3.3.3",
         "tailwindcss": "^3.4.14",
-        "typescript-eslint": "^8.14.0"
+        "typescript-eslint": "^8.14.0",
+        "@babel/plugin-proposal-private-property-in-object": "^7.18.6"
+
     }
 }
