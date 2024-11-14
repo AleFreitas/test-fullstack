@@ -156,7 +156,7 @@ To run this project as a whole locally you can freely chose from one of the foll
 
     1) Download and install Docker on your PC
     2) clone this repository using the ```git clone``` command
-    3) on the root of the project run the command ```docker compose up --build```
+    3) on the root of the project run the command ```make up```
 
 2) the hard and complex way (install and run everything manually)
 
