@@ -1,10 +1,8 @@
-import { Box, Button, Divider, FormControl, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Divider, MenuItem, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ClientDasboardTitle from '../atoms/ClientDashboardTitle';
-import ClientListItem from './ClientListItem';
-import { useQuery } from '@tanstack/react-query';
-import { createClientFn, editClientFn, getAllClientsFn } from '../../services/clientService';
-import { IClientCreateData, IClientData, IClientEditData } from '../../types/clients';
+import { createClientFn, editClientFn } from '../../services/clientService';
+import { IClientCreateData, IClientEditData } from '../../types/clients';
 import { toast } from 'react-toastify';
 import CustomButton from '../atoms/CustomButton';
 import useClientStore from '../../stores/clientStore';
@@ -40,10 +38,10 @@ const ClientForm: React.FC <{type: 'create' | 'edit'}> = ({type})   => {
         } else {
             clearChosenClient();
         }
-    },[])
+    },[])// eslint-disable-line react-hooks/exhaustive-deps
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let name = e.target.name as keyof IClientCreateData;
+        const name = e.target.name as keyof IClientCreateData;
         if (name === 'cpf' || name === 'cellphone') {
             setFormData({
                 ...formData,

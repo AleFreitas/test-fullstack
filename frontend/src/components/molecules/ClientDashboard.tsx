@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ClientDasboardTitle from '../atoms/ClientDashboardTitle';
 import ClientListItem from './ClientListItem';
@@ -12,7 +12,6 @@ import CustomButton from '../atoms/CustomButton';
 const ClientDashboard: React.FC = () => {
     const [clients, setClients] = useState<IClientData[]>([]);
     const {
-        isLoading,
         isSuccess,
         data,
         error
@@ -29,10 +28,12 @@ const ClientDashboard: React.FC = () => {
     },[error])
     useEffect(() => {
         if (data) {
-            isSuccess && toast.success('Clientes obtidos com sucesso',{toastId: 'get-clients-success', autoClose: 2000});
+            if(isSuccess) {
+                toast.success('Clientes obtidos com sucesso',{toastId: 'get-clients-success', autoClose: 2000});
+            }
             setClients(data.data);
         }
-    }, [data]);
+    }, [data, isSuccess]);
 
     return (
         <Box
