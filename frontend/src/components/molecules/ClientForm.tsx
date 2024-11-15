@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import CustomButton from '../atoms/CustomButton';
 import useClientStore from '../../stores/clientStore';
 import { useNavigate } from 'react-router-dom';
+import { isStringNonNumeric, isStringValidEmail } from '../../utils/validation';
 
 const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
     const createUserMessage =
@@ -41,6 +42,20 @@ const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
         }
     }, []); // eslint-disable-line
 
+    const raiseValidationError = (field: keyof IClientCreateData, message: string) => {
+        setFormErrorMessages({
+            ...formErrorMessages,
+            [field]: message,
+        });
+    }
+
+    const eraseValidationError = (field: keyof IClientCreateData) => {
+        setFormErrorMessages({
+            ...formErrorMessages,
+            [field]: '',
+        });
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.name as keyof IClientCreateData;
         if (name === 'cpf' || name === 'cellphone') {
@@ -49,35 +64,22 @@ const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
                 [e.target.name]: e.target.value.replace(/\D/g, ''),
             });
             if (formErrorMessages[name]) {
-                setFormErrorMessages({
-                    ...formErrorMessages,
-                    [name]: '',
-                });
+                eraseValidationError(name);
             }
-            if (/\D/.test(e.target.value)) {
-                setFormErrorMessages({
-                    ...formErrorMessages,
-                    [name]: 'Apenas números são permitidos',
-                });
+            if (isStringNonNumeric(e.target.value)) {
+                raiseValidationError(name, 'Apenas números são permitidos');
             }
             return;
         } else if (name === 'email') {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             setFormData({
                 ...formData,
                 [e.target.name]: e.target.value,
             });
             if (formErrorMessages[name]) {
-                setFormErrorMessages({
-                    ...formErrorMessages,
-                    [name]: '',
-                });
+                eraseValidationError(name);
             }
-            if (!emailRegex.test(e.target.value)) {
-                setFormErrorMessages({
-                    ...formErrorMessages,
-                    [name]: 'Email inválido',
-                });
+            if (!isStringValidEmail(e.target.value)) {
+                raiseValidationError(name, 'Email inválido');
             }
         } else {
             setFormData({
@@ -85,10 +87,7 @@ const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
                 [e.target.name]: e.target.value,
             });
             if (formErrorMessages[name]) {
-                setFormErrorMessages({
-                    ...formErrorMessages,
-                    [name]: '',
-                });
+                eraseValidationError(name);
             }
         }
     };
