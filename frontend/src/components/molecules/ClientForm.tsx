@@ -7,7 +7,8 @@ import { toast } from 'react-toastify';
 import CustomButton from '../atoms/CustomButton';
 import useClientStore from '../../stores/clientStore';
 import { useNavigate } from 'react-router-dom';
-import { isStringNonNumeric, isStringValidEmail } from '../../utils/validation';
+import { isStringNonNumeric, isStringValidCPF, isStringValidEmail } from '../../utils/validation';
+import { formatToCPF } from '../../utils/format';
 
 const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
     const createUserMessage =
@@ -58,7 +59,7 @@ const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.name as keyof IClientCreateData;
-        if (name === 'cpf' || name === 'cellphone') {
+        if (name === 'cellphone') {
             setFormData({
                 ...formData,
                 [e.target.name]: e.target.value.replace(/\D/g, ''),
@@ -70,6 +71,20 @@ const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
                 raiseValidationError(name, 'Apenas números são permitidos');
             }
             return;
+        } else if (name === 'cpf' ) {
+            if(e.target.value.length > 14) {
+                return;
+            }
+            setFormData({
+                ...formData,
+                [e.target.name]: formatToCPF(e.target.value),
+            });
+            if (formErrorMessages[name]) {
+                eraseValidationError(name);
+            }
+            if (!isStringValidCPF(formatToCPF(e.target.value))) {
+                raiseValidationError(name, 'CPF inválido');
+            } 
         } else if (name === 'email') {
             setFormData({
                 ...formData,
@@ -161,7 +176,7 @@ const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
                 })
                 .catch((e) => {
                     if (e.response.status === 409) {
-                        toast.error('Este email já está em uso', {
+                        toast.error('Este usuário já está cadastrado', {
                             toastId: 'edit-client-error',
                         });
                         return;
