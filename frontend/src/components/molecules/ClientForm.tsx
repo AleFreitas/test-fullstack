@@ -7,7 +7,11 @@ import { toast } from 'react-toastify';
 import CustomButton from '../atoms/CustomButton';
 import useClientStore from '../../stores/clientStore';
 import { useNavigate } from 'react-router-dom';
-import { isStringValidCellphone, isStringValidCPF, isStringValidEmail } from '../../utils/validation';
+import {
+    isStringValidCellphone,
+    isStringValidCPF,
+    isStringValidEmail,
+} from '../../utils/validation';
 import { formatToCellphone, formatToCPF } from '../../utils/format';
 
 const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
@@ -43,24 +47,27 @@ const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
         }
     }, []); // eslint-disable-line
 
-    const raiseValidationError = (field: keyof IClientCreateData, message: string) => {
+    const raiseValidationError = (
+        field: keyof IClientCreateData,
+        message: string
+    ) => {
         setFormErrorMessages({
             ...formErrorMessages,
             [field]: message,
         });
-    }
+    };
 
     const eraseValidationError = (field: keyof IClientCreateData) => {
         setFormErrorMessages({
             ...formErrorMessages,
             [field]: '',
         });
-    }
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.name as keyof IClientCreateData;
         if (name === 'cellphone') {
-            if(e.target.value.length > 14) {
+            if (e.target.value.length > 14) {
                 return;
             }
             setFormData({
@@ -74,8 +81,8 @@ const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
                 raiseValidationError(name, 'Número de telefone inválido');
             }
             return;
-        } else if (name === 'cpf' ) {
-            if(e.target.value.length > 14) {
+        } else if (name === 'cpf') {
+            if (e.target.value.length > 14) {
                 return;
             }
             setFormData({
@@ -87,7 +94,7 @@ const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
             }
             if (!isStringValidCPF(formatToCPF(e.target.value))) {
                 raiseValidationError(name, 'CPF inválido');
-            } 
+            }
         } else if (name === 'email') {
             setFormData({
                 ...formData,
