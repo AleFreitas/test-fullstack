@@ -7,8 +7,8 @@ import { toast } from 'react-toastify';
 import CustomButton from '../atoms/CustomButton';
 import useClientStore from '../../stores/clientStore';
 import { useNavigate } from 'react-router-dom';
-import { isStringNonNumeric, isStringValidCPF, isStringValidEmail } from '../../utils/validation';
-import { formatToCPF } from '../../utils/format';
+import { isStringValidCellphone, isStringValidCPF, isStringValidEmail } from '../../utils/validation';
+import { formatToCellphone, formatToCPF } from '../../utils/format';
 
 const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
     const createUserMessage =
@@ -60,15 +60,18 @@ const ClientForm: React.FC<{ type: 'create' | 'edit' }> = ({ type }) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.name as keyof IClientCreateData;
         if (name === 'cellphone') {
+            if(e.target.value.length > 14) {
+                return;
+            }
             setFormData({
                 ...formData,
-                [e.target.name]: e.target.value.replace(/\D/g, ''),
+                [e.target.name]: formatToCellphone(e.target.value),
             });
             if (formErrorMessages[name]) {
                 eraseValidationError(name);
             }
-            if (isStringNonNumeric(e.target.value)) {
-                raiseValidationError(name, 'Apenas números são permitidos');
+            if (!isStringValidCellphone(formatToCellphone(e.target.value))) {
+                raiseValidationError(name, 'Número de telefone inválido');
             }
             return;
         } else if (name === 'cpf' ) {
