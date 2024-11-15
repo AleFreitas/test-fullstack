@@ -6,6 +6,7 @@ from repositories.users_repository import edit_user
 from repositories.users_repository import get_all_users
 from repositories.users_repository import get_user_by_email
 from repositories.users_repository import get_user_by_id
+from repositories.users_repository import get_user_by_cpf
 from utils.user_types import UserDataDict
 from werkzeug.exceptions import BadRequest
 from werkzeug.exceptions import Conflict
@@ -23,12 +24,19 @@ def update_user(user: UserDataDict):
         user_exists = get_user_by_id(session, user["id"])
         if not user_exists:
             raise BadRequest("User does not exist")
+        if user.get("cpf"):
+            existent_user_by_cpf = get_user_by_cpf(session, user["cpf"])
+            if (existent_user_by_cpf and (
+                existent_user_by_cpf.to_dict()["id"] != user["id"]
+            )):
+                raise Conflict("User already exists")
         if user.get("email"):
-            existent_user_email = get_user_by_email(session, user["email"])
-            if existent_user_email and (
-                existent_user_email.to_dict()["id"] != user["id"]
+            existent_user_by_email = get_user_by_email(session, user["email"])
+            if existent_user_by_email and (
+                existent_user_by_email.to_dict()["id"] != user["id"]
             ):
                 raise Conflict("User already exists")
+            
         return edit_user(session, user)
 
 
@@ -36,6 +44,9 @@ def insert_user(user: UserDataDict):
     """Implements the business logic to create a new user"""
     with db.session() as session:
         existent_user = get_user_by_email(session, user["email"])
+        if existent_user:
+            raise Conflict("User already exists")
+        existent_user = get_user_by_cpf(session, user["cpf"])
         if existent_user:
             raise Conflict("User already exists")
         return create_new_user(session, user)

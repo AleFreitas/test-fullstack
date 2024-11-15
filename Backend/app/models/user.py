@@ -16,7 +16,7 @@ class User(db.Model):  # type: ignore
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     cellphone = db.Column(db.String(20))
-    cpf = db.Column(db.String(20))
+    cpf = db.Column(db.String(20), unique=True, nullable=False)
     status = db.Column(db.String(50), default="inactive")
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(

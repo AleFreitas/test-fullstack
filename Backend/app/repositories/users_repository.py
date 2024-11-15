@@ -23,6 +23,10 @@ def get_user_by_email(db_session: Session, email: str):
     return db_session.query(User).filter(User.email == email).first()
 
 
+def get_user_by_cpf(db_session: Session, cpf: str):
+    """Returns the user with the given cpf"""
+    return db_session.query(User).filter(User.cpf == cpf).first()
+
 def edit_user(db_session: Session, new_user_data: UserDataDict):
     """
     Receives a dictionary with the new user data and updates the user with the
